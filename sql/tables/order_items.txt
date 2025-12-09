@@ -1,0 +1,7 @@
+CREATE TABLE order_items (
+    order_id INT REFERENCES orders(id),
+    product_id INT REFERENCES products(id),
+    quantity INT NOT NULL,
+    price NUMERIC(12,2) NOT NULL,  -- цена на момент продажи
+    PRIMARY KEY(order_id, product_id)
+);

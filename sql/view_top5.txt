@@ -1,0 +1,26 @@
+CREATE OR REPLACE VIEW top5_products_last_month AS
+SELECT 
+    p.name AS product_name,
+    root_cat.name AS root_category,
+    SUM(oi.quantity) AS total_sold
+FROM order_items oi
+JOIN orders o ON o.id = oi.order_id
+JOIN products p ON p.id = oi.product_id
+
+# Выход на корневую категорию первого уровня
+LEFT JOIN categories c ON c.id = p.category_id
+LEFT JOIN categories root_cat 
+       ON root_cat.id = (
+            SELECT rc.id
+            FROM categories rc
+            WHERE rc.id = c.id 
+               OR rc.id = c.parent_id
+            ORDER BY rc.parent_id NULLS FIRST
+            LIMIT 1
+       )
+
+WHERE o.created_at >= NOW() - INTERVAL '1 month'
+
+GROUP BY p.name, root_cat.name
+ORDER BY total_sold DESC
+LIMIT 5;

@@ -1,0 +1,29 @@
+Оптимизация индексов:
+
+CREATE INDEX idx_orders_created_at ON orders(created_at);
+CREATE INDEX idx_order_items_product ON order_items(product_id);
+CREATE INDEX idx_products_category ON products(category_id);
+CREATE INDEX idx_categories_parent ON categories(parent_id);
+
+
+Вместо VIEW лучше использовать MATERIALIZED VIEW:
+
+CREATE MATERIALIZED VIEW mv_top_products AS ...
+REFRESH MATERIALIZED VIEW mv_top_products;
+
+
+Сохранять root_category_id у каждого товара для быстрого доступа:
+
+ALTER TABLE products ADD COLUMN root_category_id INT;
+
+
+Если категорий много (>10k) — лучше хранить дерево так:
+
+CREATE TABLE category_paths (
+    parent_id INT,
+    child_id INT,
+    depth INT,
+    PRIMARY KEY(parent_id, child_id)
+);
+
+Тогда выборка категории 1-го уровня делается простым JOIN.

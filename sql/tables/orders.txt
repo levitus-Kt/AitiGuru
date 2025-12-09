@@ -1,0 +1,5 @@
+CREATE TABLE orders (
+    id SERIAL PRIMARY KEY,
+    client_id INT NOT NULL REFERENCES clients(id),
+    created_at TIMESTAMP NOT NULL DEFAULT NOW()
+);
