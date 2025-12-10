@@ -1,0 +1,46 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:15
+    container_name: shop_db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: shop
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build: ./api
+    container_name: shop_api
+    restart: always
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/shop
+    ports:
+      - "8000:8000"
+
+  migrate:
+    build: ./api
+    container_name: shop_migrations
+    depends_on:
+      db:
+        condition: service_healthy
+    command: alembic upgrade head
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/shop
+    restart: "no"
+
+volumes:
+  postgres_data:

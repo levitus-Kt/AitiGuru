@@ -1,0 +1,28 @@
+name: CI - Run Tests
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          cd api
+          pip install -r requirements.txt
+
+      - name: Run tests
+        run: |
+          cd api
+          pytest -vv
