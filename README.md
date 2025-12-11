@@ -53,6 +53,18 @@ Uvicorn
 ```
 project/
 │
+├── sql/
+│   ├── count_child.txt
+│   ├── optimization.txt
+│   ├── orders_sum.txt
+│   ├── view_top5.txt
+│   └── tables/
+│       ├── categories.txt
+│       ├── clients.txt
+│       ├── orders.txt
+│       ├── products.txt
+│       └── order_items.txt
+│
 ├── api/
 │   ├── Dockerfile
 │   ├── requirements.txt
@@ -74,6 +86,16 @@ project/
     └── workflows/
         └── ci.yml
 ```
+
+## SQL
+
+В папке sql хранятся запросы к таблицам в папке sql/tables
+
+count_child - подсчет дочерних категорий
+
+orders_sum - сумма заказов по клиенту
+
+optimization - оптимизированные запросы
 
 # Запуск сервиса
 
