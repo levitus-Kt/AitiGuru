@@ -3,7 +3,7 @@ from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from api.database import Base
+from ..database import Base
 from main import app, get_db
 
 TEST_DATABASE_URL = "sqlite:///./test.db"  # отдельная тестовая БД
